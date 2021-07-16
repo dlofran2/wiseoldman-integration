@@ -5,9 +5,10 @@
 1. Clone repo
 2. Ensure node and npm are installed
 3. Run `npm install` in your directory to install necessary packages
-4. Run `npm run start` to begin application
+4. Create a `.env` file and add required environment variables, see below
+5. Run `npm run start` to begin application
 
-## Necessary Environment Variables
+## Environment Variables
 
 Create a `.env` file and add the following information
 
@@ -22,11 +23,12 @@ The following commands can be used within a Discord Channel when the bot is acti
 
 ### Competition (!competition)
 
-`!competition help` - provides information on running command in the Discord client
-`!competition metrics=["fishing","hunter"]` - runs the command with fishing and hunter skills as the only metrics.
-`!competition groupId=1234 competitionId=12345` - runs the command with custom `groupId` and `competitionId`
+- `!competition help` provides information on running command in the Discord client
+- `!competition metrics=["fishing","hunter"]` runs the command with fishing and hunter skills as the only metrics.
+- `!competition groupId=1234 competitionId=12345` runs the command with custom `groupId` and `competitionId`
 
 For a list of all metrics allowed, please visit https://wiseoldman.net/docs/competitions.
+
 Note: Currently the application has only been tested with skill metrics.
 
 ## TODO
