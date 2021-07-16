@@ -1,12 +1,19 @@
+const AsciiTable = require('ascii-table');
 const Discord = require('discord.js');
 
 const client = new Discord.Client();
 
 const DEFAULT_ARGS = {
-    metrics: ['agility', 'farming', 'fishing', 'hunter', 'mining', 'thieving', 'woodcutting']
+    metrics: ['agility', 'farming']
 };
 
-const sendToChannel = async (channelId, loggingFn) => {
+const sendToChannel = (channelId, message) => {
+    const channel = client.channels.cache.get(channelId);
+
+    channel.send(message);
+}
+
+const sendTablesToChannel = async (channelId, loggingFn) => {
     const channel = client.channels.cache.get(channelId);
 
     const responses = await loggingFn();
@@ -20,14 +27,20 @@ const setupDiscordIntegration = (botToken, channelId, loggingFn) => {
     client.login(botToken);
 
     client.on('message', message => {
-        const channel = client.channels.cache.get(channelId);
-
         if (!message.content.startsWith('!competition') || message.author.bot) {
             return;
         }
 
         if (message.content.includes('help')) {
-            channel.send(`Parameters: (* = required)\n*competitionId -> ID given by WiseOldMan for the competition\n*groupId -> ID for your clan on WiseOldMan\nmetrics -> (default value = gathering skills) -> array of supported WiseOldMan strings, see this link for a list of possible metrics https://wiseoldman.net/docs/competitions\n\tMetrics must be in the format metrics='["metric1","metric2"]' Note position of the single quotes and double quotes`);
+            const helpTable = new AsciiTable();
+
+            helpTable
+                .setHeading('Parameters', 'Description', 'Default Value')
+                .addRow('competitionId*', 'ID given by WiseOldMan for the competition', '.env COMPETITION_ID')
+                .addRow('groupId*', 'ID given by WiseOldMan for the clan', '.env GROUP_ID')
+                .addRow('metrics**', 'array of supported WiseOldMan metrics', '["agility", "farming"]');
+
+            sendToChannel(channelId, `\`\`\`\n${helpTable}\n*competitionId and groupId can be defined in a .env file or as arguments in the message\n**For a list of all supported metrics see here (https://wiseoldman.net/docs/competitions)\n**Metrics must be an array of metric strings separated only by a comma (no spaces) ["metric1","metric2"].  Note the use of double quotes\`\`\``);
 
             return;
         }
@@ -45,15 +58,19 @@ const setupDiscordIntegration = (botToken, channelId, loggingFn) => {
                 acc[key] = JSON.parse(value);
 
                 return acc;
-            }, DEFAULT_ARGS);
+            }, {
+                ...DEFAULT_ARGS,
+                competitionId: process.env.COMPETITION_ID,
+                groupId: process.env.GROUP_ID
+            });
 
         if (!competitionId || !groupId) {
-            channel.send('competitionId and groupId are required. For more help use command "!competition help"');
+            sendToChannel(channelId, 'competitionId and groupId are required. For more help use command "!competition help"');
 
             return;
         }
 
-        sendToChannel(channelId, () => loggingFn(competitionId, groupId, metrics));
+        sendTablesToChannel(channelId, () => loggingFn(competitionId, groupId, metrics));
     });
 };
 
