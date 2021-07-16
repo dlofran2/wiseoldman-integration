@@ -6,16 +6,16 @@
 2. Ensure node and npm are installed
 3. Run `npm install` in your directory to install necessary packages
 4. Create a `.env` file and add required environment variables, see below
-5. Run `npm run start` to begin application
+5. Run `npm run start` to start bot server
 
 ## Environment Variables
 
 Create a `.env` file and add the following information
 
-- BOT_TOKEN = Token for your bot Discord
-- CHANNEL_ID = Channel ID of the channel you want messages sent to in Discord
-- COMPETITION_ID = (optional) Compeition ID given by WiseOldMan
-- GROUP_ID = (optional) GroupID given by WiseOldMan
+- `BOT_TOKEN` = Token for your bot Discord
+- `CHANNEL_ID` = Channel ID of the channel you want messages sent to in Discord
+- `COMPETITION_ID` = (optional) Compeition ID given by WiseOldMan
+- `GROUP_ID` = (optional) GroupID given by WiseOldMan
 
 ## Commands
 
