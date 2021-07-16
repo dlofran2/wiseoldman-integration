@@ -1,0 +1,3 @@
+// const GROUP_ID = 755;
+// const COMPETITION_ID = 3904;
+// const METRICS = ['agility', 'farming', 'fishing', 'hunter', 'mining', 'thieving', 'woodcutting'];
